@@ -13,14 +13,14 @@ const Testimonial = () => {
       text: 'It is a long established fact that by the readable content of a lot layout. The point of using Lorem a more-or-less normal distribu to using Content here, content',
     },
     {
-      _id: 1,
+      _id: 2,
       name: 'Linda Harris',
       img: people2,
       location: 'California',
       text: 'It is a long established fact that by the readable content of a lot layout. The point of using Lorem a more-or-less normal distribu to using Content here, content',
     },
     {
-      _id: 1,
+      _id: 3,
       name: 'Susan Williams',
       img: people3,
       location: 'California',
