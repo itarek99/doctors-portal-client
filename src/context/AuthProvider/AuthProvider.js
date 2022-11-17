@@ -22,7 +22,7 @@ const AuthProvider = ({ children }) => {
   };
 
   const updateCurrentUser = (updateInfo) => {
-    return updateProfile(user, updateInfo);
+    return updateProfile(auth.currentUser, updateInfo);
   };
 
   const loginUser = (email, password) => {

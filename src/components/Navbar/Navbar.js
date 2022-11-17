@@ -50,6 +50,19 @@ const Navbar = () => {
                 className='menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52'
               >
                 {navItems}
+                {user?.uid ? (
+                  <li>
+                    <button onClick={handleLogOut} className='btn btn-error text-white'>
+                      Sign Out
+                    </button>
+                  </li>
+                ) : (
+                  <li>
+                    <Link to='/login' className='btn btn-primary text-white'>
+                      Log In
+                    </Link>
+                  </li>
+                )}
               </ul>
             </div>
             <Link to='/' className='font-bold text-secondary py-3 text-2xl'>
@@ -57,19 +70,27 @@ const Navbar = () => {
             </Link>
           </div>
           <div className='justify-end hidden lg:flex'>
-            <ul className='menu menu-horizontal p-0'>{navItems}</ul>
+            <ul className='menu menu-horizontal p-0'>
+              {navItems}
+              {user?.uid ? (
+                <li>
+                  <button onClick={handleLogOut} className='btn btn-error rounded-lg text-white'>
+                    Sign Out
+                  </button>
+                </li>
+              ) : (
+                <li>
+                  <Link to='/login' className='btn btn-primary rounded-lg text-white'>
+                    Log In
+                  </Link>
+                </li>
+              )}
+            </ul>
           </div>
-          <div>
-            {user?.uid ? (
-              <button onClick={handleLogOut} className='btn btn-error text-white'>
-                Sign Out
-              </button>
-            ) : (
-              <Link to='/login' className='btn btn-primary text-white'>
-                Log In
-              </Link>
-            )}
-          </div>
+
+          <label htmlFor='dashboard-drawer' className='btn btn-ghost drawer-button lg:hidden'>
+            <HiMenuAlt1 className='text-2xl' />
+          </label>
         </div>
       </div>
     </div>

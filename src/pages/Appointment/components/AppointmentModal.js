@@ -1,5 +1,10 @@
-const AppointmentModal = ({ treatment, setTreatment, appointmentDate }) => {
+import { useContext } from 'react';
+import toast from 'react-hot-toast';
+import { AuthContext } from '../../../context/AuthProvider/AuthProvider';
+
+const AppointmentModal = ({ refetch, treatment, setTreatment, appointmentDate }) => {
   const { name, slots } = treatment;
+  const { user } = useContext(AuthContext);
 
   const handleBooking = (e) => {
     e.preventDefault();
@@ -9,7 +14,7 @@ const AppointmentModal = ({ treatment, setTreatment, appointmentDate }) => {
     const email = form.email.value;
     const phone = form.phone.value;
 
-    const booking = {
+    const appointment = {
       treatment: treatment.name,
       appointmentDate,
       patient: name,
@@ -17,9 +22,22 @@ const AppointmentModal = ({ treatment, setTreatment, appointmentDate }) => {
       email,
       phone,
     };
-    // TODO: close modal after successfully submit form
-    setTreatment(null);
-    console.log(booking);
+
+    fetch(`http://localhost:5000/appointments`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(appointment),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        if (result.acknowledged) {
+          toast.success('Appointment Confirmed!');
+          setTreatment(null);
+          refetch();
+        } else {
+          toast.error(result.message);
+        }
+      });
   };
   return (
     <>
@@ -47,8 +65,22 @@ const AppointmentModal = ({ treatment, setTreatment, appointmentDate }) => {
               ))}
             </select>
 
-            <input name='name' type='text' placeholder='Full Name' className='input input-bordered w-full' />
-            <input name='email' type='email' placeholder='Email' className='input input-bordered w-full' />
+            <input
+              name='name'
+              defaultValue={user?.displayName}
+              readOnly
+              type='text'
+              placeholder='Full Name'
+              className='input input-bordered w-full'
+            />
+            <input
+              name='email'
+              defaultValue={user?.email}
+              readOnly
+              type='email'
+              placeholder='Email'
+              className='input input-bordered w-full'
+            />
             <input name='phone' type='text' placeholder='Phone Number' className='input input-bordered w-full' />
             <input type='submit' value='Submit' className='btn btn-accent w-full' />
           </form>
