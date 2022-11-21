@@ -10,11 +10,17 @@ const MyAppointment = () => {
   const { data: myAppointments = [], isLoading } = useQuery({
     queryKey: ['appointments', user?.email],
     queryFn: async () => {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        headers: {
+          authorization: `bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
       const data = await response.json();
       return data;
     },
   });
+
+  console.log(myAppointments);
 
   if (isLoading) return <Loading />;
 

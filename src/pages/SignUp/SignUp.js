@@ -3,11 +3,18 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthProvider/AuthProvider';
+import useToken from '../../hooks/useToken';
 
 const SignUp = () => {
   const { createUserWithEmail, updateCurrentUser } = useContext(AuthContext);
   const [signUpError, setSignUpError] = useState('');
+  const [createdUserEmail, serCreatedUserEmail] = useState('');
+  const [token] = useToken(createdUserEmail);
   const navigate = useNavigate();
+
+  if (token) {
+    navigate('/');
+  }
 
   const {
     register,
@@ -22,10 +29,12 @@ const SignUp = () => {
       .then(() => {
         updateCurrentUser({ displayName: name })
           .then(() => {
-            navigate('/');
-            toast('Sign Up Successful');
+            insertUserToDB(name, email);
+
+            toast.success('Sign Up Successful');
           })
           .catch((err) => {
+            console.log(err);
             const errMessage = err.message.split('/')[1].slice(0, -2).split('-').join(' ');
             setSignUpError(errMessage);
           });
@@ -33,6 +42,19 @@ const SignUp = () => {
       .catch((err) => {
         const errMessage = err.message.split('/')[1].slice(0, -2).split('-').join(' ');
         setSignUpError(errMessage);
+      });
+  };
+
+  const insertUserToDB = (name, email) => {
+    const user = { name, email };
+    fetch(`http://localhost:5000/users`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(user),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        serCreatedUserEmail(email);
       });
   };
 
