@@ -25,8 +25,8 @@ const MyAppointment = () => {
   if (isLoading) return <Loading />;
 
   return (
-    <div className='p-5'>
-      <h3 className='text-2xl'>My Appointments</h3>
+    <div className='p-6'>
+      <h3 className='text-3xl font-bold'>My Appointments</h3>
       <div className='overflow-x-auto mt-6'>
         <table className='table w-full'>
           <thead>

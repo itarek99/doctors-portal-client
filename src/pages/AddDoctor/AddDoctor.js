@@ -1,14 +1,19 @@
 import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const AddDoctor = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const {
     register,
     formState: { errors },
     handleSubmit,
     reset,
   } = useForm();
+
+  const navigate = useNavigate();
 
   const imgBBKey = process.env.REACT_APP_IMGBB_API_KEY;
 
@@ -22,10 +27,11 @@ const AddDoctor = () => {
   });
 
   const handleAddDoctor = (docInfo) => {
+    setIsSubmitting(true);
     const image = docInfo.doctorImg[0];
     const formData = new FormData();
     formData.append('image', image);
-    const url = `https://api.imgbb.com/1/upload?expiration=600&key=${imgBBKey}`;
+    const url = `https://api.imgbb.com/1/upload?key=${imgBBKey}`;
 
     fetch(url, { method: 'POST', body: formData })
       .then((res) => res.json())
@@ -50,6 +56,8 @@ const AddDoctor = () => {
               if (result.acknowledged) {
                 toast.success(`${docInfo.name} Added as New Doctor!`);
                 reset();
+                navigate('/dashboard/managedoctors');
+                setIsSubmitting(false);
               }
             });
         }
@@ -131,7 +139,11 @@ const AddDoctor = () => {
           )}
         </div>
 
-        <button className='btn max-w-sm w-full btn-accent mt-6' type='submit'>
+        <button
+          disabled={isSubmitting}
+          className='btn max-w-sm w-full btn-accent mt-6 disabled:bg-gray-300 disabled:text-accent'
+          type='submit'
+        >
           Add Doctor
         </button>
       </form>

@@ -6,6 +6,7 @@ import Appointment from '../pages/Appointment/Appointment';
 import MyAppointment from '../pages/Dashboard/components/MyAppointment';
 import Home from '../pages/Home/Home';
 import Login from '../pages/Login/Login';
+import ManageDoctors from '../pages/ManageDoctors/ManageDoctors';
 import SignUp from '../pages/SignUp/SignUp';
 import Users from '../pages/Users/Users';
 import AdminRoute from './AdminRoute/AdminRoute';
@@ -47,6 +48,14 @@ const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <AddDoctor />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: '/dashboard/managedoctors',
+        element: (
+          <AdminRoute>
+            <ManageDoctors />
           </AdminRoute>
         ),
       },
